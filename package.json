@@ -1,0 +1,19 @@
+{
+  "name": "cs4550_finalproject",
+  "version": "1.0.0",
+  "description": "final project for cs4550\r this repository is a project requirement for WebDev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ciyingzuo/CS4550_FinalProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ciyingzuo/CS4550_FinalProject/issues"
+  },
+  "homepage": "https://github.com/ciyingzuo/CS4550_FinalProject#readme"
+}
