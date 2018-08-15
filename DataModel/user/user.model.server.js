@@ -9,11 +9,11 @@ createUser = user => {
 
 retrieveUser = (user, by) => {
     if (by === "username") {
-        return userModel.find({username: user.username})
+        return userModel.findOne({username: user.username})
     } else if (by === "credential") {
-        return userModel.find({username: user.username, password: user.password})
+        return userModel.findOne({username: user.username, password: user.password})
     } else if (by === "ID") {
-        return userModel.find({_id: user._id})
+        return userModel.findOne({_id: user._id})
     }
 };
 

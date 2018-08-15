@@ -1,6 +1,6 @@
 module.exports = app => {
 
-    const userModel = require('../user.model.server');
+    const userModel = require('./user.model.server');
 
     createUser = (req, res) => {
         userModel.createUser(req.body).then(user => {
@@ -61,14 +61,16 @@ module.exports = app => {
     addFriend = (req, res) => {
         userModel.retrieveUser({_id: req.params['userID']}, "ID").then(user => {
             user.friendList.push(req.session['currentUser']._id);
-            userModel.updateUser(user);
-        });
+            userModel.updateUser(user).then(user => {
+                userModel.retrieveUser({_id: req.session['currentUser']}, "ID")
+                    .then(user => {
+                        user.friendList.push(req.params['userID']);
+                        userModel.updateUser(user).then(user => res.send(user))
+                    })
 
-        userModel.retrieveUser(req.session['currentUser'], "ID")
-            .then(user => {
-                user.friendList.push(req.params['userID']);
-                return userModel.updateUser(user)
+
             })
+        });
     }
 
     removeFriend = (req, res) => {
@@ -107,7 +109,7 @@ module.exports = app => {
     app.post('/user/login', login);
     app.get('/user/logout', logout);
     app.get('/user/currentUser', currentUser);
-    app.post('/user/addFriend/:userID', addFriend);
+    app.get('/user/addFriend/:userID', addFriend);
     app.post('/user/removeFriend/:userID', removeFriend);
     app.post('/user/addBlock/:userID', addBlock);
     app.post('/user/removeBlock/:userID', removeBlock);

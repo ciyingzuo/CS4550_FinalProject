@@ -1,8 +1,8 @@
 module.exports = app => {
 
-    const postModel = require('../post.model.server');
-    const userModel = require('../user.model.server');
-    const messageModel = require('../message.model.server');
+    const postModel = require('./post.model.server');
+    const userModel = require('../user/user.model.server');
+    const messageModel = require('../message/message.model.server');
 
     createPost = (req, res) => {
         messageModel.createMessage(req.body).then(message => {
