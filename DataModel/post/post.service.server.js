@@ -5,39 +5,59 @@ module.exports = app => {
     const messageModel = require('../message/message.model.server');
 
     createPost = (req, res) => {
-        messageModel.createMessage(req.body).then(message => {
-            postModel.createPost({owner: req.params['userID'], message: [message]}).then(post => {
-                userModel.retrieveUser({_id: req.params['userID']}).then(user => {
-                    user.post().push(post._id);
-                    return userModel.updateUser(user);
-                })
-            })
-        });
+        if (req.session['currentUser']) {
+            userModel.retrieveUser(req.session['currentUser'], "ID")
+                .then(user => {
+                    const message = req.body;
+                    message.from = user._id;
+                    messageModel.createMessage(message).then(message => {
+                        postModel.createPost({owner: user._id, message: [message._id]}).then(post => {
+                            userModel.retrieveUser({_id: user._id}, "ID").then(user => {
+                                user.post.push(post._id);
+                                userModel.updateUser(user).then(user => res.send(user));
+                            })
+                        })
+                    });
 
+                })
+        } else {
+            res.sendStatus(403)
+        }
     };
 
     retrievePost = (req, res) => {
         postModel.retrievePost(req.params['postID'], "post").then(post => {
-            return res.send(post);
+            res.send(post);
         })
     };
 
     updatePost = (req, res) => {
-        postModel.retrievePost(req.params['postID'], "post").then(post => {
-            post.message.push(req.body);
-            return postModel.updatePost({_id: post._id, message: post.message})
-        })
+        if (req.session['currentUser']) {
+            userModel.retrieveUser(req.session['currentUser'], "ID")
+                .then(user => {
+                    const message = req.body;
+                    message.from = user._id;
+                    messageModel.createMessage(message).then(message => {
+                        postModel.retrievePost(req.params['postID'], "post").then(post => {
+                            post.message.push(message);
+                            postModel.updatePost(post).then(post => res.send(post))
+                        })
+                    })
+                })
+        } else {
+            res.sendStatus(403)
+        }
     };
 
     deletePost = (req, res) => {
-        return postModel.deletePost(req.params['postID'])
+        postModel.deletePost(req.params['postID']).then(res.sendStatus(200))
     };
 
     findPostForUser = (req, res) => {
-        return postModel.retrievePost(req.params['userID'], "user")
+        postModel.retrievePost(req.params['userID'], "user").then(post => res.send(post))
     };
 
-    app.post('/post/:userID', createPost);
+    app.post('/post/', createPost);
     app.get('/post/:postID', retrievePost);
     app.put('/post/:postID', updatePost);
     app.delete('/post/:postID', deletePost);

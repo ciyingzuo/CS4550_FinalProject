@@ -10,7 +10,7 @@ retrievePost = (ID, by) => {
     if(by === "user"){
         return postModel.find({owner: ID})
     } else if(by === "post"){
-        return postModel.find({_id: ID})
+        return postModel.findOne({_id: ID});
     }
 }
 

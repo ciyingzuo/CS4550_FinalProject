@@ -4,12 +4,13 @@ const userModel = mongoose.model('User', userSchema);
 
 
 createUser = user => {
+    user.registerDate = Date.now();
     return userModel.create(user)
 };
 
 retrieveUser = (user, by) => {
     if (by === "username") {
-        return userModel.findOne({username: user.username})
+        return userModel.find({username: user.username})
     } else if (by === "credential") {
         return userModel.findOne({username: user.username, password: user.password})
     } else if (by === "ID") {
@@ -25,8 +26,7 @@ updateUser = user => {
         emailAddress: user.emailAddress,
         phoneNumber: user.phoneNumber,
         friendList: user.friendList,
-        follower: user.follower,
-        following: user.following,
+        blockList: user.blockList,
         group: user.group,
         post: user.post,
         message: user.message

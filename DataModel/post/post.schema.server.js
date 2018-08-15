@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 module.exports = mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     },
     message: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'messageModel'
+        ref: 'Message'
     }],
 }, {collection: 'post'});

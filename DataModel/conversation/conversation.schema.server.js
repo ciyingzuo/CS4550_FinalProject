@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 module.exports = mongoose.Schema({
     starter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     },
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     },
     message: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'messageModel'
+        ref: 'Message'
     }]
 }, {collection: 'conversation'});

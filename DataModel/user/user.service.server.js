@@ -10,7 +10,7 @@ module.exports = app => {
     };
 
     retrieveUser = (req, res) => {
-        userModel.retrieveUser(req.body, "ID").then(user => {
+        userModel.retrieveUser(req.params['username'], "username").then(user => {
             res.send(user);
         }, err => {
             res.sendStatus(400)
@@ -18,15 +18,13 @@ module.exports = app => {
     };
 
     updateUser = (req, res) => {
-        userModel.updateUser(req.body).then(user => {
-            res.sendStatus(200);
-        });
+        userModel.updateUser(req.body).then(
+            res.sendStatus(200));
     };
 
     deleteUser = (req, res) => {
-        userModel.deleteUser(req.body).then(user => {
-            res.sendStatus(200);
-        });
+        userModel.deleteUser(req.body).then(
+            res.sendStatus(200));
     };
 
     login = (req, res) => {
@@ -61,58 +59,53 @@ module.exports = app => {
     addFriend = (req, res) => {
         userModel.retrieveUser({_id: req.params['userID']}, "ID").then(user => {
             user.friendList.push(req.session['currentUser']._id);
-            userModel.updateUser(user).then(user => {
+            userModel.updateUser(user).then(
                 userModel.retrieveUser({_id: req.session['currentUser']}, "ID")
                     .then(user => {
-                        user.friendList.push(req.params['userID']);
+                        user.friendList.push(req.params['userID'])
+                        console.log(user);
                         userModel.updateUser(user).then(user => res.send(user))
-                    })
-
-
-            })
+                    }))
         });
     }
 
     removeFriend = (req, res) => {
         userModel.retrieveUser({_id: req.params['userID']}, "ID").then(user => {
             user.friendList.pull(req.session['currentUser']._id);
-            userModel.updateUser(user);
+            userModel.updateUser(user).then(
+                userModel.retrieveUser({_id: req.session['currentUser']}, "ID")
+                    .then(user => {
+                        user.friendList.pull(req.params['userID']);
+                        userModel.updateUser(user).then(user => res.send(user))
+                    }))
         });
-
-        userModel.retrieveUser(req.session['currentUser'], "ID")
-            .then(user => {
-                user.friendList.pull(req.params['userID']);
-                return userModel.updateUser(user)
-            })
     }
 
     addBlock = (req, res) => {
-        userModel.retrieveUser(req.session['currentUser'], "ID")
-            .then(user => {
-                user.blockList.push(req.params['userID']);
-                return userModel.updateUser(user)
-            })
+        userModel.retrieveUser(req.session['currentUser'], "ID").then(user => {
+            user.blockList.push(req.params['userID']);
+            userModel.updateUser(user).then(user => res.send(user))
+        })
     };
 
     removeBlock = (req, res) => {
-        userModel.retrieveUser(req.session['currentUser'], "ID")
-            .then(user => {
-                user.blockList.pull(req.params['userID']);
-                return userModel.updateUser(user)
-            })
+        userModel.retrieveUser(req.session['currentUser'], "ID").then(user => {
+            user.blockList.pull(req.params['userID']);
+            userModel.updateUser(user).then(user => res.send(user))
+        })
     };
 
     app.post('/user', createUser);
-    app.get('/user/:userID', retrieveUser);
+    app.get('/user/:username', retrieveUser);
     app.put('/user', updateUser);
     app.delete('/user/:userID', deleteUser);
     app.post('/user/login', login);
     app.get('/user/logout', logout);
     app.get('/user/currentUser', currentUser);
     app.get('/user/addFriend/:userID', addFriend);
-    app.post('/user/removeFriend/:userID', removeFriend);
-    app.post('/user/addBlock/:userID', addBlock);
-    app.post('/user/removeBlock/:userID', removeBlock);
+    app.get('/user/removeFriend/:userID', removeFriend);
+    app.get('/user/addBlock/:userID', addBlock);
+    app.get('/user/removeBlock/:userID', removeBlock);
 
 
 };

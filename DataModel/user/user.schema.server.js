@@ -10,22 +10,22 @@ module.exports = mongoose.Schema({
     isAdmin: Boolean,
     friendList: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     }],
     blockList: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     }],
     group: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'groupModel'
+        ref: 'Group'
     }],
     post: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'postModel'
+        ref: 'Post'
     }],
     message: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'messageModel'
+        ref: 'Message'
     }]
 }, {collection: 'user'});

@@ -5,6 +5,6 @@ module.exports = mongoose.Schema({
     type: String,
     from: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     },
 }, {collection: 'message'});

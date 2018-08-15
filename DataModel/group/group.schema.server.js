@@ -4,15 +4,14 @@ module.exports = mongoose.Schema({
     date: String,
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     },
-    numberOfMember: Number,
-    user: [{
+    member: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        ref: 'User'
     }],
     conversation: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'conversationModel'
+        ref: 'Conversation'
     }],
 }, {collection: 'group'});

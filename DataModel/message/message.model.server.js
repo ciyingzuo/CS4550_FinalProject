@@ -3,6 +3,7 @@ const messageSchema = require('./message.schema.server');
 const messageModel = mongoose.model('Message', messageSchema);
 
 createMessage = message => {
+    message.date = Date.now();
     return messageModel.create(message)
 };
 

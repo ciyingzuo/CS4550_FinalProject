@@ -29,6 +29,7 @@ const mongoose = require('mongoose');
 mongoose.connect(LOCALURL).then(promise => {console.log("Connected with database")});
 
 require('./DataModel/user/user.service.server')(app);
+require('./DataModel/post/post.service.server')(app);
 
 
 app.listen(process.env.PORT || 4550);
