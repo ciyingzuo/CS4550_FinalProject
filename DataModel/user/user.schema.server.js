@@ -8,16 +8,11 @@ module.exports = mongoose.Schema({
     phoneNumber: String,
     registerDate: String,
     isAdmin: Boolean,
-
     friendList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'userModel'
     }],
-    follower: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
-    }],
-    following: [{
+    blockList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'userModel'
     }],
