@@ -1,6 +1,10 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+# dependencies
+package.json
+package-lock.json
+
 ### STS ###
 .apt_generated
 .classpath

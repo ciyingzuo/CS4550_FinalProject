@@ -10,8 +10,13 @@ module.exports = app => {
                 .then(user => {
                     conversationModel.createConversation({starter: user._id, message: []}).then(conversation => {
                         const group = req.body;
-                        group.conversation = conversation;
-                        groupModel.createGroup(group).then(group => res.send(group))
+                        group.conversation = conversation._id;
+                        group.owner = user._id;
+                        group.member = [user._id];
+                        groupModel.createGroup(group).then(group => {
+                            user.group.push(group._id);
+                            userModel.updateUser(user).then(res.send(group))
+                        })
                     })
                 })
         } else {
@@ -37,7 +42,7 @@ module.exports = app => {
                 .then(user => {
                     groupModel.retrieveGroup(req.params['groupID'], "group").then(group => {
                         group.member.push(user._id);
-                        groupModel.updateGroup(group).then(group => {
+                        groupModel.updateGroup(group).then(updated => {
                             user.group.push(group._id);
                             userModel.updateUser(user).then(user => res.send(user))
                         })
@@ -54,7 +59,7 @@ module.exports = app => {
                 .then(user => {
                     groupModel.retrieveGroup(req.params['groupID'], "group").then(group => {
                         group.member.pull(user._id);
-                        groupModel.updateGroup(group).then(group => {
+                        groupModel.updateGroup(group).then(updated => {
                             user.group.pull(group._id);
                             userModel.updateUser(user).then(user => res.send(user))
                         })

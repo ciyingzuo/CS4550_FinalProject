@@ -10,8 +10,8 @@ module.exports = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-    conversation: [{
+    conversation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conversation'
-    }],
+    },
 }, {collection: 'group'});
