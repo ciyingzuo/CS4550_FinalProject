@@ -6,8 +6,10 @@ module.exports = mongoose.Schema({
     lastName: String,
     emailAddress: String,
     phoneNumber: String,
-    registerDate: String,
+    registerDate: Date,
+    birthDate: Date,
     isAdmin: Boolean,
+    privacy: String,
     friendList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

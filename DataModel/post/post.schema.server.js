@@ -4,8 +4,13 @@ module.exports = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    location: String,
+    text: String,
+    date: Date,
+    like: Number,
     message: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
     }],
 }, {collection: 'post'});
+

@@ -8,16 +8,18 @@ module.exports = app => {
         if (req.session['currentUser']) {
             userModel.retrieveUser(req.session['currentUser'], "ID")
                 .then(user => {
-                    const message = req.body;
-                    message.from = user._id;
-                    messageModel.createMessage(message).then(message => {
-                        postModel.createPost({owner: user._id, message: [message._id]}).then(post => {
-                            userModel.retrieveUser({_id: user._id}, "ID").then(user => {
-                                user.post.push(post._id);
-                                userModel.updateUser(user).then(user => res.send(user));
-                            })
+                    postModel.createPost({
+                        owner: user._id,
+                        message: [],
+                        text: req.body.text,
+                        like: 1,
+                        location: req.body.location
+                    }).then(post => {
+                        userModel.retrieveUser({_id: user._id}, "ID").then(user => {
+                            user.post.push(post._id);
+                            userModel.updateUser(user).then(user => res.send(user));
                         })
-                    });
+                    })
 
                 })
         } else {
@@ -32,6 +34,7 @@ module.exports = app => {
     };
 
     updatePost = (req, res) => {
+
         if (req.session['currentUser']) {
             userModel.retrieveUser(req.session['currentUser'], "ID")
                 .then(user => {
@@ -54,7 +57,12 @@ module.exports = app => {
     };
 
     findPostForUser = (req, res) => {
-        postModel.retrievePost(req.params['userID'], "user").then(post => res.send(post))
+        postModel.retrievePost(req.params['userID'], "user").then(post => {
+            if(post === []){
+
+            }
+
+            res.send(post)})
     };
 
     app.post('/post/', createPost);

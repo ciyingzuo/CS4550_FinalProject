@@ -10,7 +10,10 @@ createUser = user => {
 
 retrieveUser = (user, by) => {
     if (by === "username") {
-        return userModel.find({username: user.username})
+        return userModel.findOne({username: user.username})
+    } else if (by === "search") {
+        let query = new RegExp(user.username);
+        return userModel.find({username: query}, 'username', {limit: 10})
     } else if (by === "credential") {
         return userModel.findOne({username: user.username, password: user.password})
     } else if (by === "ID") {
